@@ -28,7 +28,7 @@ export default defineConfig({
         icons: [
           {
             src: "images/android-chrome-512x512.png",
-            sizes: "152x152",
+            sizes: "512x512",
             type: "image/png",
           },
           {
@@ -40,14 +40,14 @@ export default defineConfig({
         screenshots: [
           {
             src: "images/screenshot-mobile.png",
-            sizes: "461x821",
+            sizes: "454x802",
             type: "image/png",
             form_factor: "narrow",
             label: "Đọc báo",
           },
           {
             src: "images/screenshot.png",
-            sizes: "805x547",
+            sizes: "1133x937",
             type: "image/png",
             form_factor: "wide",
             label: "Đọc báo",
