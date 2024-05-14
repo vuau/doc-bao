@@ -11,6 +11,7 @@
     {
       "source": "/tuoitre/:path*",
       "destination": "https://tuoitre.vn/:path*"
-    }
+    },
+    { "source": "/(.*)", "destination": "/" }
   ]
 }
