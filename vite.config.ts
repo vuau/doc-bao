@@ -24,9 +24,10 @@ export default defineConfig({
         orientation: "portrait",
         scope: "/",
         start_url: "/",
+        id: "/",
         icons: [
           {
-            src: "images/android-chrome-152x152.png",
+            src: "images/android-chrome-512x512.png",
             sizes: "152x152",
             type: "image/png",
           },
