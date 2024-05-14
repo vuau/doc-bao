@@ -100,12 +100,12 @@ a:visited {
 }
 
 .article {
-  background: var(--background) !important;
-  border: 1px solid var(--border);
+  /* background: var(--background) !important; */
+  /* border: 1px solid var(--border); */
   box-sizing: border-box;
   width: 100%;
   margin-top: 10px;
-  padding: 0.5rem;
+  /* padding: 0.5rem; */
   overflow: auto;
 }
 
@@ -200,4 +200,8 @@ a:visited {
 
 ul[data-campaign] {
     display: none;
+}
+
+[data-reach-dialog-content] {
+  padding: 1rem !important;
 }

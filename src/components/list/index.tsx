@@ -16,6 +16,7 @@ interface RSSItem {
 }
 
 async function parseRSS(site: string, url: string): Promise<RSSItem[]> {
+  debugger; //eslint-disable-line
   try {
     const response = await fetch(url, { mode: "no-cors" });
     const xml = await response.text();
@@ -53,57 +54,57 @@ function getItemSize(index: number): number {
 
 const feeds: Record<string, Array<[string, string]>>  = {
   "trang-chu": [
-    ["vnexpress", "/vnexpress/rss/tin-moi-nhat.rss"],
-    ["tuoitre", "/tuoitre/rss/tin-moi-nhat.rss"],
-    ["thanhnien", "/thanhnien/rss/home.rss"],
+    ["vnexpress", "vnexpress.net/rss/tin-moi-nhat.rss"],
+    ["tuoitre", "tuoitre.vn/rss/tin-moi-nhat.rss"],
+    ["thanhnien", "thanhnien.vn/rss/home.rss"],
   ],
   "thoi-su": [
-    ["vnexpress", "/vnexpress/rss/thoi-su.rss"],
-    ["tuoitre", "/tuoitre/rss/thoi-su.rss"],
-    ["thanhnien", "/thanhnien/rss/thoi-su.rss"],
+    ["vnexpress", "vnexpress.net/rss/thoi-su.rss"],
+    ["tuoitre", "tuoitre.vn/rss/thoi-su.rss"],
+    ["thanhnien", "thanhnien.vn/rss/thoi-su.rss"],
   ],
   "the-gioi": [
-    ["vnexpress", "/vnexpress/rss/the-gioi.rss"],
-    ["tuoitre", "/tuoitre/rss/the-gioi.rss"],
-    ["thanhnien", "/thanhnien/rss/the-gioi.rss"],
+    ["vnexpress", "vnexpress.net/rss/the-gioi.rss"],
+    ["tuoitre", "tuoitre.vn/rss/the-gioi.rss"],
+    ["thanhnien", "thanhnien.vn/rss/the-gioi.rss"],
   ],
   "kinh-te": [
-    ["vnexpress", "/vnexpress/rss/kinh-doanh.rss"],
-    ["tuoitre", "/tuoitre/rss/kinh-doanh.rss"],
-    ["thanhnien", "/thanhnien/rss/kinh-te.rss"],
+    ["vnexpress", "vnexpress.net/rss/kinh-doanh.rss"],
+    ["tuoitre", "tuoitre.vn/rss/kinh-doanh.rss"],
+    ["thanhnien", "thanhnien.vn/rss/kinh-te.rss"],
   ],
   "giao-duc": [
-    ["vnexpress", "/vnexpress/rss/giao-duc.rss"],
-    ["tuoitre", "/tuoitre/rss/giao-duc.rss"],
-    ["thanhnien", "/thanhnien/rss/giao-duc.rss"],
+    ["vnexpress", "vnexpress.net/rss/giao-duc.rss"],
+    ["tuoitre", "tuoitre.vn/rss/giao-duc.rss"],
+    ["thanhnien", "thanhnien.vn/rss/giao-duc.rss"],
   ],
   "giai-tri": [
-    ["vnexpress", "/vnexpress/rss/giai-tri.rss"],
-    ["tuoitre", "/tuoitre/rss/giai-tri.rss"],
-    ["thanhnien", "/thanhnien/rss/giai-tri.rss"],
+    ["vnexpress", "vnexpress.net/rss/giai-tri.rss"],
+    ["tuoitre", "tuoitre.vn/rss/giai-tri.rss"],
+    ["thanhnien", "thanhnien.vn/rss/giai-tri.rss"],
   ],
   "phap-luat": [
-    ["vnexpress", "/vnexpress/rss/phap-luat.rss"],
-    ["tuoitre", "/tuoitre/rss/phap-luat.rss"],
-    ["thanhnien", "/thanhnien/rss/phap-luat.rss"],
+    ["vnexpress", "vnexpress.net/rss/phap-luat.rss"],
+    ["tuoitre", "tuoitre.vn/rss/phap-luat.rss"],
+    ["thanhnien", "thanhnien.vn/rss/phap-luat.rss"],
   ],
   "doi-song": [
-    ["vnexpress", "/vnexpress/rss/doi-song.rss"],
-    ["tuoitre", "/tuoitre/rss/doi-song.rss"],
-    ["thanhnien", "/thanhnien/rss/doi-song.rss"],
+    ["vnexpress", "vnexpress.net/rss/doi-song.rss"],
+    ["tuoitre", "tuoitre.vn/rss/doi-song.rss"],
+    ["thanhnien", "thanhnien.vn/rss/doi-song.rss"],
   ],
   "goc-nhin": [
-    ["vnexpress", "/vnexpress/rss/goc-nhin.rss"],
-    ["tuoitre", "/tuoitre/rss/ban-doc-lam-bao.rss"],
-    ["thanhnien", "/thanhnien/rss/toi-viet.rss"],
+    ["vnexpress", "vnexpress.net/rss/goc-nhin.rss"],
+    ["tuoitre", "tuoitre.vn/rss/ban-doc-lam-bao.rss"],
+    ["thanhnien", "thanhnien.vn/rss/toi-viet.rss"],
   ],
   "tam-su": [
-    ["vnexpress", "/vnexpress/rss/tam-su.rss"],
+    ["vnexpress", "vnexpress.net/rss/tam-su.rss"],
   ],
   "cong-nghe": [
-    ["vnexpress", "/vnexpress/rss/so-hoa.rss"],
-    ["tuoitre", "/tuoitre/rss/nhip-song-so.rss"],
-    ["thanhnien", "/thanhnien/rss/cong-nghe-game.rss"],
+    ["vnexpress", "vnexpress.net/rss/so-hoa.rss"],
+    ["tuoitre", "tuoitre.vn/rss/nhip-song-so.rss"],
+    ["thanhnien", "thanhnien.vn/rss/cong-nghe-game.rss"],
   ]
 };
 
@@ -120,7 +121,7 @@ function List() {
     queryKey: ["stories", tag],
     queryFn: async () => {
       if (!tag) return [];
-      return Promise.all(feeds[tag].map(async ([site, feed]) => parseRSS(site, feed))).then(values => values.flat()); // Flatten array
+      return Promise.all(feeds[tag].map(async ([site, feed]) => parseRSS(site, `/proxy/${feed}`))).then(values => values.flat()); // Flatten array
     },
     refetchOnWindowFocus: false,
   });
