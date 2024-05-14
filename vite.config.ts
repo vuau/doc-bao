@@ -18,6 +18,7 @@ export default defineConfig({
       manifest: {
         name: "Đọc báo",
         short_name: "Đọc báo",
+        description: "Tin tức tổng hợp từ các trang báo điện tử lớn ở Việt Nam",
         theme_color: "#fff",
         background_color: "#fff",
         display: "standalone",
