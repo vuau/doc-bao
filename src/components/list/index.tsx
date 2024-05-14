@@ -1,19 +1,24 @@
-import { CSSProperties, useRef, useCallback, useState, useEffect } from "react";
+import { CSSProperties, useRef, useCallback } from "react";
 import { VariableSizeList } from "react-window";
 import { useQuery } from "@tanstack/react-query";
-import { NavLink, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import {
+  NavLink,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { Loader } from "lucide-react";
 import Item from "../item";
 import { Dialog } from "@reach/dialog";
 import ItemDetail from "../item-detail";
 import { ArrowLeft } from "lucide-react";
-import { decode } from 'html-entities';
+import { decode } from "html-entities";
 
 interface RSSItem {
   title: string;
   url: string;
   id: string;
-  site: string,
+  site: string;
 }
 
 async function parseRSS(site: string, url: string): Promise<RSSItem[]> {
@@ -21,21 +26,21 @@ async function parseRSS(site: string, url: string): Promise<RSSItem[]> {
     const response = await fetch(url, { mode: "no-cors" });
     const xml = await response.text();
     const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xml, 'text/xml');
-    const items = xmlDoc.querySelectorAll('item');
-    
+    const xmlDoc = parser.parseFromString(xml, "text/xml");
+    const items = xmlDoc.querySelectorAll("item");
+
     const parsedItems: RSSItem[] = [];
-    items.forEach(item => {
+    items.forEach((item) => {
       parsedItems.push({
-        title: decode(item.querySelector('title')?.textContent || ''),
-        url: item.querySelector('link')?.textContent || '',
-        id: item.querySelector('link')?.textContent || '',
-        site
+        title: decode(item.querySelector("title")?.textContent || ""),
+        url: item.querySelector("link")?.textContent || "",
+        id: item.querySelector("link")?.textContent || "",
+        site,
       });
     });
     return parsedItems;
   } catch (error) {
-    console.error('Error fetching or parsing RSS:', error);
+    console.error("Error fetching or parsing RSS:", error);
     return [];
   }
 }
@@ -52,7 +57,7 @@ function getItemSize(index: number): number {
   return rowHeights[index] || 30;
 }
 
-const feeds: Record<string, Array<[string, string]>>  = {
+const feeds: Record<string, Array<[string, string]>> = {
   "trang-chu": [
     ["vnexpress", "vnexpress.net/rss/tin-moi-nhat.rss"],
     ["tuoitre", "tuoitre.vn/rss/tin-moi-nhat.rss"],
@@ -98,24 +103,20 @@ const feeds: Record<string, Array<[string, string]>>  = {
     ["tuoitre", "tuoitre.vn/rss/ban-doc-lam-bao.rss"],
     ["thanhnien", "thanhnien.vn/rss/toi-viet.rss"],
   ],
-  "tam-su": [
-    ["vnexpress", "vnexpress.net/rss/tam-su.rss"],
-  ],
+  "tam-su": [["vnexpress", "vnexpress.net/rss/tam-su.rss"]],
   "cong-nghe": [
     ["vnexpress", "vnexpress.net/rss/so-hoa.rss"],
     ["tuoitre", "tuoitre.vn/rss/nhip-song-so.rss"],
     ["thanhnien", "thanhnien.vn/rss/cong-nghe-game.rss"],
-  ]
+  ],
 };
 
 function List() {
   const listRef = useRef<VariableSizeList>(null);
-  const dialogRef = useRef<HTMLDivElement>(null);
-  const [lastScrollTop, setLastScrollTop] = useState(0);
   const navigate = useNavigate();
   const { tag } = useParams();
-  const [ params ] = useSearchParams();
-  const url = params.get('url');
+  const [params] = useSearchParams();
+  const url = params.get("url");
   if (!tag) {
     navigate("/doc-bao/thoi-su");
   }
@@ -123,7 +124,9 @@ function List() {
     queryKey: ["stories", tag],
     queryFn: async () => {
       if (!tag) return [];
-      return Promise.all(feeds[tag].map(async ([site, feed]) => parseRSS(site, `/${feed}`))).then(values => values.flat()); // Flatten array
+      return Promise.all(
+        feeds[tag].map(async ([site, feed]) => parseRSS(site, `/${feed}`)),
+      ).then((values) => values.flat());
     },
     refetchOnWindowFocus: false,
   });
@@ -150,28 +153,6 @@ function List() {
   const close = useCallback(() => {
     navigate(`/doc-bao/${tag}`);
   }, [navigate, tag]);
-
-  const handleScroll = (e: any) => {
-    const dialogHeader = document.querySelector('.dialog-header-container') as HTMLDivElement;
-    const scrollTop = (e.target as HTMLDivElement).scrollTop;
-    if (scrollTop > lastScrollTop) {
-      dialogHeader.style.top = '-80px';
-    } else {
-      dialogHeader.style.top = '0';
-    }
-    setLastScrollTop(scrollTop <=0 ? 0 : scrollTop);
-  }
-
-  useEffect(() => {
-    // hide dialog header when scroll down and show it when scroll up
-    if (dialogRef.current) {
-      const dialogMain = document.querySelector('div[data-reach-dialog-inner]');
-      dialogMain?.addEventListener('scroll', handleScroll);
-      return () => dialogMain?.removeEventListener('scroll', handleScroll);
-    }
-  }, [dialogRef.current, lastScrollTop]);
-
-  // console.log(lastScrollTop);
 
   return (
     <>
@@ -211,14 +192,14 @@ function List() {
         </VariableSizeList>
       )}
       {url && (
-        <Dialog ref={dialogRef}  isOpen onDismiss={close}>
+        <Dialog isOpen onDismiss={close}>
           <div className="dialog-header-container">
-          <div className="dialog-header">
-            <button className="header-button" onClick={close}>
-              <ArrowLeft />
-              <span>Trở lại</span>
-            </button>
-          </div>
+            <div className="dialog-header">
+              <button className="header-button" onClick={close}>
+                <ArrowLeft />
+                <span>Trở lại</span>
+              </button>
+            </div>
           </div>
           <ItemDetail />
         </Dialog>
@@ -227,4 +208,3 @@ function List() {
   );
 }
 export default List;
-
