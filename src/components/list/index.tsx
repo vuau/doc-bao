@@ -1,4 +1,4 @@
-import { CSSProperties, useRef, useCallback } from "react";
+import { CSSProperties, useRef, useCallback, useState, useEffect } from "react";
 import { VariableSizeList } from "react-window";
 import { useQuery } from "@tanstack/react-query";
 import { NavLink, useNavigate, useParams, useSearchParams } from "react-router-dom";
@@ -111,7 +111,7 @@ const feeds: Record<string, Array<[string, string]>>  = {
 function List() {
   const listRef = useRef<VariableSizeList>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
-  // const [lastScrollTop, setLastScrollTop] = useState(0);
+  const [lastScrollTop, setLastScrollTop] = useState(0);
   const navigate = useNavigate();
   const { tag } = useParams();
   const [ params ] = useSearchParams();
@@ -151,26 +151,26 @@ function List() {
     navigate(`/doc-bao/${tag}`);
   }, [navigate, tag]);
 
-  // const handleScroll = (e: any) => {
-  //   const dialogHeader = document.querySelector('.dialog-header');
-  //   const scrollTop = (e.target as HTMLDivElement).scrollTop;
-  //   if (scrollTop > lastScrollTop) {
-  //     dialogHeader?.classList.add('hidden');
-  //   } else {
-  //     dialogHeader?.classList.remove('hidden');
-  //   }
-  //   setLastScrollTop(scrollTop <=0 ? 0 : scrollTop);
-  // }
+  const handleScroll = (e: any) => {
+    const dialogHeader = document.querySelector('.dialog-header-container') as HTMLDivElement;
+    const scrollTop = (e.target as HTMLDivElement).scrollTop;
+    if (scrollTop > lastScrollTop) {
+      dialogHeader.style.top = '-80px';
+    } else {
+      dialogHeader.style.top = '0';
+    }
+    setLastScrollTop(scrollTop <=0 ? 0 : scrollTop);
+  }
 
-  // useEffect(() => {
-  //   // hide dialog header when scroll down and show it when scroll up
-  //   if (dialogRef.current) {
-  //     const dialogMain = document.querySelector('div[data-reach-dialog-inner]');
-  //     dialogMain?.addEventListener('scroll', handleScroll);
-  //     return () => dialogMain?.removeEventListener('scroll', handleScroll);
-  //   }
-  // }, [dialogRef.current, lastScrollTop]);
-  //
+  useEffect(() => {
+    // hide dialog header when scroll down and show it when scroll up
+    if (dialogRef.current) {
+      const dialogMain = document.querySelector('div[data-reach-dialog-inner]');
+      dialogMain?.addEventListener('scroll', handleScroll);
+      return () => dialogMain?.removeEventListener('scroll', handleScroll);
+    }
+  }, [dialogRef.current, lastScrollTop]);
+
   // console.log(lastScrollTop);
 
   return (
@@ -212,11 +212,13 @@ function List() {
       )}
       {url && (
         <Dialog ref={dialogRef}  isOpen onDismiss={close}>
+          <div className="dialog-header-container">
           <div className="dialog-header">
             <button className="header-button" onClick={close}>
               <ArrowLeft />
               <span>Trở lại</span>
             </button>
+          </div>
           </div>
           <ItemDetail />
         </Dialog>
