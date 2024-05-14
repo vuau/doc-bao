@@ -1,0 +1,16 @@
+{
+  "rewrites": [
+    {
+      "source": "/vnexpress/:path*",
+      "destination": "https://vnexpress.net/:path*"
+    },
+    {
+      "source": "/thanhnien/:path*",
+      "destination": "https://thanhnien.vn/:path*"
+    },
+    {
+      "source": "/tuoitre/:path*",
+      "destination": "https://tuoitre.vn/:path*"
+    }
+  ]
+}
