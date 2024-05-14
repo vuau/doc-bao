@@ -18,7 +18,6 @@ interface RSSItem {
 
 async function parseRSS(site: string, url: string): Promise<RSSItem[]> {
   try {
-  debugger; //eslint-disable-line
     const response = await fetch(url, { mode: "no-cors" });
     const xml = await response.text();
     const parser = new DOMParser();
@@ -111,6 +110,8 @@ const feeds: Record<string, Array<[string, string]>>  = {
 
 function List() {
   const listRef = useRef<VariableSizeList>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  // const [lastScrollTop, setLastScrollTop] = useState(0);
   const navigate = useNavigate();
   const { tag } = useParams();
   const [ params ] = useSearchParams();
@@ -126,8 +127,6 @@ function List() {
     },
     refetchOnWindowFocus: false,
   });
-
-  console.log({ data });
 
   function ItemRenderer({
     style,
@@ -151,6 +150,28 @@ function List() {
   const close = useCallback(() => {
     navigate(`/doc-bao/${tag}`);
   }, [navigate, tag]);
+
+  // const handleScroll = (e: any) => {
+  //   const dialogHeader = document.querySelector('.dialog-header');
+  //   const scrollTop = (e.target as HTMLDivElement).scrollTop;
+  //   if (scrollTop > lastScrollTop) {
+  //     dialogHeader?.classList.add('hidden');
+  //   } else {
+  //     dialogHeader?.classList.remove('hidden');
+  //   }
+  //   setLastScrollTop(scrollTop <=0 ? 0 : scrollTop);
+  // }
+
+  // useEffect(() => {
+  //   // hide dialog header when scroll down and show it when scroll up
+  //   if (dialogRef.current) {
+  //     const dialogMain = document.querySelector('div[data-reach-dialog-inner]');
+  //     dialogMain?.addEventListener('scroll', handleScroll);
+  //     return () => dialogMain?.removeEventListener('scroll', handleScroll);
+  //   }
+  // }, [dialogRef.current, lastScrollTop]);
+  //
+  // console.log(lastScrollTop);
 
   return (
     <>
@@ -190,7 +211,7 @@ function List() {
         </VariableSizeList>
       )}
       {url && (
-        <Dialog isOpen onDismiss={close}>
+        <Dialog ref={dialogRef}  isOpen onDismiss={close}>
           <div className="dialog-header">
             <button className="header-button" onClick={close}>
               <ArrowLeft />
@@ -204,3 +225,4 @@ function List() {
   );
 }
 export default List;
+

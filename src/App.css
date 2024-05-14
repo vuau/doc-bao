@@ -42,6 +42,12 @@ a:visited {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  position: sticky;
+  top: 1rem;
+}
+
+.hidden {
+  display: none;
 }
 
 .header-button {
