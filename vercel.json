@@ -1,15 +1,15 @@
 {
   "rewrites": [
     {
-      "source": "/vnexpress/:path*",
+      "source": "/vnexpress.net/:path*",
       "destination": "https://vnexpress.net/:path*"
     },
     {
-      "source": "/thanhnien/:path*",
+      "source": "/thanhnien.vn/:path*",
       "destination": "https://thanhnien.vn/:path*"
     },
     {
-      "source": "/tuoitre/:path*",
+      "source": "/tuoitre.vn/:path*",
       "destination": "https://tuoitre.vn/:path*"
     },
     { "source": "/(.*)", "destination": "/" }

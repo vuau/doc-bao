@@ -7,6 +7,7 @@ import Item from "../item";
 import { Dialog } from "@reach/dialog";
 import ItemDetail from "../item-detail";
 import { ArrowLeft } from "lucide-react";
+import { decode } from 'html-entities';
 
 interface RSSItem {
   title: string;
@@ -16,8 +17,8 @@ interface RSSItem {
 }
 
 async function parseRSS(site: string, url: string): Promise<RSSItem[]> {
-  debugger; //eslint-disable-line
   try {
+  debugger; //eslint-disable-line
     const response = await fetch(url, { mode: "no-cors" });
     const xml = await response.text();
     const parser = new DOMParser();
@@ -27,7 +28,7 @@ async function parseRSS(site: string, url: string): Promise<RSSItem[]> {
     const parsedItems: RSSItem[] = [];
     items.forEach(item => {
       parsedItems.push({
-        title: item.querySelector('title')?.textContent || '',
+        title: decode(item.querySelector('title')?.textContent || ''),
         url: item.querySelector('link')?.textContent || '',
         id: item.querySelector('link')?.textContent || '',
         site
@@ -121,7 +122,7 @@ function List() {
     queryKey: ["stories", tag],
     queryFn: async () => {
       if (!tag) return [];
-      return Promise.all(feeds[tag].map(async ([site, feed]) => parseRSS(site, `/proxy/${feed}`))).then(values => values.flat()); // Flatten array
+      return Promise.all(feeds[tag].map(async ([site, feed]) => parseRSS(site, `/${feed}`))).then(values => values.flat()); // Flatten array
     },
     refetchOnWindowFocus: false,
   });
@@ -193,7 +194,7 @@ function List() {
           <div className="dialog-header">
             <button className="header-button" onClick={close}>
               <ArrowLeft />
-              <span>Back</span>
+              <span>Trở lại</span>
             </button>
           </div>
           <ItemDetail />
