@@ -201,7 +201,7 @@ function List() {
         <VariableSizeList
           ref={listRef}
           itemCount={data.length}
-          height={window.innerHeight - 60}
+          height={window.innerHeight - document.querySelector("header")!.clientHeight - 1}
           width="100%"
           itemSize={getItemSize}
         >
