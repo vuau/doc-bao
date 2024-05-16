@@ -14,11 +14,26 @@ import ItemDetail from "../item-detail";
 import { ArrowLeft } from "lucide-react";
 import { decode } from "html-entities";
 
-interface RSSItem {
+export interface RSSItem {
   title: string;
   url: string;
   id: string;
   site: string;
+  pubDate: string;
+}
+
+function sortByPubDate(list: RSSItem[]) {
+    // Sort the list based on pubDate
+    list.sort(function(a, b) {
+        // Convert date strings to Date objects
+        var dateA = new Date(a.pubDate);
+        var dateB = new Date(b.pubDate);
+        
+        // Compare the dates numerically
+        return dateB.getTime() - dateA.getTime();
+    });
+
+    return list;
 }
 
 async function parseRSS(site: string, url: string): Promise<RSSItem[]> {
@@ -35,9 +50,11 @@ async function parseRSS(site: string, url: string): Promise<RSSItem[]> {
         title: decode(item.querySelector("title")?.textContent || ""),
         url: item.querySelector("link")?.textContent || "",
         id: item.querySelector("link")?.textContent || "",
+        pubDate: item.querySelector("pubDate")?.textContent || "",
         site,
       });
     });
+
     return parsedItems;
   } catch (error) {
     console.error("Error fetching or parsing RSS:", error);
@@ -126,7 +143,7 @@ function List() {
       if (!tag) return [];
       return Promise.all(
         feeds[tag].map(async ([site, feed]) => parseRSS(site, `/${feed}`)),
-      ).then((values) => values.flat());
+      ).then((values) => sortByPubDate(values.flat()));
     },
     refetchOnWindowFocus: false,
   });

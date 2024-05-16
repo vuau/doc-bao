@@ -1,13 +1,8 @@
 import { CSSProperties, useEffect, useRef } from "react";
 import { VariableSizeList } from "react-window";
 import { Link, useParams } from "react-router-dom";
-
-interface RSSItem {
-  title: string;
-  url: string;
-  id: string;
-  site: string,
-}
+import { RSSItem } from "../../components/list";
+import dayjs from "dayjs";
 
 type TListProps = {
   index: number;
@@ -47,7 +42,7 @@ function ListItem({
           <Link to={`/doc-bao/${tag}?url=${data.url}&title=${data.title}`}>
             {data.title}
             <span className="comment-count">
-              { data.site }
+              { data.site } { dayjs(data.pubDate).format('DD/MM') }
             </span>
           </Link>
       </div>
