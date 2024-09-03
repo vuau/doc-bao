@@ -1,4 +1,4 @@
-import { CSSProperties, useRef, useCallback } from "react";
+import { CSSProperties, useRef, useCallback, useEffect } from "react";
 import { VariableSizeList } from "react-window";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -134,9 +134,13 @@ function List() {
   const { tag } = useParams();
   const [params] = useSearchParams();
   const url = params.get("url");
-  if (!tag) {
-    navigate("/doc-bao/thoi-su");
-  }
+
+  useEffect(() => {
+      if (!tag) {
+      navigate("/doc-bao/thoi-su");
+      }
+  }, [ tag, navigate ]);
+
   const { data, isLoading } = useQuery({
     queryKey: ["stories", tag],
     queryFn: async () => {
